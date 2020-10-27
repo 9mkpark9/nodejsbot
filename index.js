@@ -32,8 +32,9 @@ client.on("guildMemberRemove", (member) => {
 client.on('message', (message) => {
   if(message.author.bot) return;
 
-  if(message.content == 'ping') {
-    return message.reply('퐁~!!');
+  if(message.content === '핑') {
+    const timeTake = Date.now() - message.createdTimestamp;
+    message.reply(`서버와의 핑은 **${timeTake}ms** 입니다!`);
   }
 
   if(message.content == 'embed') {
@@ -58,7 +59,7 @@ client.on('message', (message) => {
     let helpImg = 'https://images-ext-1.discordapp.net/external/RyofVqSAVAi0H9-1yK6M8NGy2grU5TWZkLadG-rwqk0/https/i.imgur.com/EZRAPxR.png';
     let commandList = [
       {name: '!help', desc: 'help'},
-      {name: 'ping', desc: '현재 핑 상태'},
+      {name: '핑', desc: '현재 핑 상태'},
       {name: 'embed', desc: 'embed 예제1'},
       {name: '!전체공지', desc: 'dm으로 전체 공지 보내기'},
       {name: '!전체공지2', desc: 'dm으로 전체 embed 형식으로 공지 보내기'},
