@@ -41,7 +41,11 @@ client.on('message', (message) => {
     let embed = new Discord.RichEmbed()
       .setTitle('타이틀')
       .setURL('http://www.naver.com')
+<<<<<<< HEAD
       .setAuthor('이안2', img, 'http://www.naver.com')
+=======
+      .setAuthor('윤주영', img, 'http://www.naver.com')
+>>>>>>> 5fb2f287e3b67253143493babd011e2be897b843
       .setThumbnail(img)
       .addBlankField()
       .addField('Inline field title', 'Some value here')
@@ -51,7 +55,11 @@ client.on('message', (message) => {
       .addField('Inline field title', 'Some value here1\nSome value here2\nSome value here3\n')
       .addBlankField()
       .setTimestamp()
+<<<<<<< HEAD
       .setFooter('이안2가 만듬', img)
+=======
+      .setFooter('윤주영가 만듬', img)
+>>>>>>> 5fb2f287e3b67253143493babd011e2be897b843
 
     message.channel.send(embed)
   } else if(message.content == '!help') {
@@ -152,7 +160,7 @@ client.on('message', (message) => {
     if(isNum && (clearLine <= 0 || 100 < clearLine)) {
       message.channel.send("1부터 100까지의 숫자만 입력해주세요.")
       return;
-    } else if(!isNum) { // c @나긋해 3
+    } else if(!isNum) { // c @윤주영 3
       if(message.content.split('<@').length == 2) {
         if(isNaN(message.content.split(' ')[2])) return;
 
