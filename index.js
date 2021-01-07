@@ -69,9 +69,9 @@ client.on('message', (message) => {
     ];
     let commandStr = '';
     let embed = new Discord.RichEmbed()
-      .setAuthor('Help of 이안2 BOT', helpImg)
+      .setAuthor('Help of 윤주영 BOT', helpImg)
       .setColor('#186de6')
-      .setFooter(`이안2 BOT ❤️`)
+      .setFooter(`윤주영 BOT ❤️`)
       .setTimestamp()
     
     commandList.forEach(x => {
@@ -111,9 +111,9 @@ client.on('message', (message) => {
     if(message.member != null) { // 채널에서 공지 쓸 때
       let contents = message.content.slice('!전체공지2'.length);
       let embed = new Discord.RichEmbed()
-        .setAuthor('공지 of 이안2 BOT')
+        .setAuthor('공지 of 윤주영 BOT')
         .setColor('#186de6')
-        .setFooter(`이안2 BOT ❤️`)
+        .setFooter(`윤주영 BOT ❤️`)
         .setTimestamp()
   
       embed.addField('공지: ', contents);
