@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const token = process.argv.length == 2 ? process.env.token : "";
+const moment = require("moment");
+require("moment-duration-format");
 const welcomeChannelName = "안녕하세요";
 const byeChannelName = "안녕히가세요";
 const welcomeChannelComment = "어서오세요.";
@@ -8,7 +10,7 @@ const byeChannelComment = "안녕히가세요.";
 
 client.on('ready', () => {
   console.log('켰다.');
-  client.user.setPresence({ game: { name: '24시 활동중 ' }, status: 'online' })
+  client.user.setPresence({ game: { name: '24시 활동중' }, status: 'online' })
 });
 
 client.on("guildMemberAdd", (member) => {
@@ -32,13 +34,43 @@ client.on("guildMemberRemove", (member) => {
 client.on('message', (message) => {
   if(message.author.bot) return;
 
-  if(message.content === '핑') {
-    const timeTake = Date.now() - message.createdTimestamp;
-    message.reply(`서버와의 핑은 **${timeTake}ms** 입니다!`);
+  if(message.content == 'ping') {
+    return message.reply('pong');
+  }
+
+  if(message.content == '!si') {
+    let embed = new Discord.RichEmbed()
+    let img = 'https://cdn.discordapp.com/avatars/764142106436436000/e1ff7bfbf53c8c8ade0699220b0481f6.png?size=256';
+    var duration = moment.duration(client.uptime).format(" D [일], H [시간], m [분], s [초]");
+    embed.setColor('#186de6')
+    embed.setAuthor('server info of 윤주영 BOT', img)
+    embed.setFooter(`윤주영 BOT ❤️`)
+    embed.addBlankField()
+    embed.addField('RAM usage',    `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`, true);
+    embed.addField('running time', `${duration}`, true);
+    embed.addField('user',         `${client.users.size.toLocaleString()}`, true);
+    embed.addField('server',       `${client.guilds.size.toLocaleString()}`, true);
+    // embed.addField('channel',      `${client.channels.size.toLocaleString()}`, true);
+    embed.addField('Discord.js',   `v${Discord.version}`, true);
+    embed.addField('Node',         `${process.version}`, true);
+
+    let arr = client.guilds.array();
+    let list = '';
+    list = `\`\`\`css\n`;
+
+    for(let i=0;i<arr.length;i++) {
+      // list += `${arr[i].name} - ${arr[i].id}\n`
+      list += `${arr[i].name}\n`
+    }
+    list += `\`\`\`\n`
+    embed.addField('list:',        `${list}`);
+
+    embed.setTimestamp()
+    message.channel.send(embed);
   }
 
   if(message.content == 'embed') {
-    let img = 'https://cdn.discordapp.com/avatars/764142106436436000/e1ff7bfbf53c8c8ade0699220b0481f6.png?size=2048';
+    let img = 'https://cdn.discordapp.com/avatars/764142106436436000/e1ff7bfbf53c8c8ade0699220b0481f6.png?size=256';
     let embed = new Discord.RichEmbed()
       .setTitle('타이틀')
       .setURL('http://www.naver.com')
@@ -59,7 +91,7 @@ client.on('message', (message) => {
     let helpImg = 'https://images-ext-1.discordapp.net/external/RyofVqSAVAi0H9-1yK6M8NGy2grU5TWZkLadG-rwqk0/https/i.imgur.com/EZRAPxR.png';
     let commandList = [
       {name: '!help', desc: 'help'},
-      {name: '핑', desc: '현재 핑 상태'},
+      {name: 'ping', desc: '현재 핑 상태'},
       {name: 'embed', desc: 'embed 예제1'},
       {name: '!전체공지', desc: 'dm으로 전체 공지 보내기'},
       {name: '!전체공지2', desc: 'dm으로 전체 embed 형식으로 공지 보내기'},
@@ -73,7 +105,7 @@ client.on('message', (message) => {
       .setColor('#186de6')
       .setFooter(`윤주영 BOT ❤️`)
       .setTimestamp()
-    
+
     commandList.forEach(x => {
       commandStr += `• \`\`${changeCommandStringLength(`${x.name}`)}\`\` : **${x.desc}**\n`;
     });
@@ -115,14 +147,14 @@ client.on('message', (message) => {
         .setColor('#186de6')
         .setFooter(`윤주영 BOT ❤️`)
         .setTimestamp()
-  
+
       embed.addField('공지: ', contents);
-  
+
       message.member.guild.members.array().forEach(x => {
         if(x.user.bot) return;
         x.user.send(embed)
       });
-  
+
       return message.reply('공지를 전송했습니다.');
     } else {
       return message.reply('채널에서 실행해주세요.');
@@ -135,7 +167,7 @@ client.on('message', (message) => {
         if(x.user.bot) return;
         x.user.send(`<@${message.author.id}> ${contents}`);
       });
-  
+
       return message.reply('공지를 전송했습니다.');
     } else {
       return message.reply('채널에서 실행해주세요.');
@@ -144,7 +176,7 @@ client.on('message', (message) => {
     if(message.channel.type == 'dm') {
       return message.reply('dm에서 사용할 수 없는 명령어 입니다.');
     }
-    
+
     if(message.channel.type != 'dm' && checkPermission(message)) return
 
     var clearLine = message.content.slice('!청소 '.length);
@@ -153,7 +185,7 @@ client.on('message', (message) => {
     if(isNum && (clearLine <= 0 || 100 < clearLine)) {
       message.channel.send("1부터 100까지의 숫자만 입력해주세요.")
       return;
-    } else if(!isNum) { // c @윤주영 3
+    } else if(!isNum) { // c @나긋해 3
       if(message.content.split('<@').length == 2) {
         if(isNaN(message.content.split(' ')[2])) return;
 
@@ -210,4 +242,4 @@ async function AutoMsgDelete(message, str, delay = 3000) {
 }
 
 
-client.login(token);
+client.login(token); 
